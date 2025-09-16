@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karachi Ride Booking | Local Bike & Rickshaw Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FFCC00;
+            --secondary: #333333;
+            --light: #F8F9FA;
+            --dark: #212121;
+            --success: #28A745;
+            --white: #FFFFFF;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        body.dark-mode header {
+            background: var(--secondary);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .theme-toggle {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            color: var(--secondary);
+        }
+
+        body.dark-mode .hero h1 {
+            color: var(--light);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        body.dark-mode .hero p {
+            color: #aaa;
+        }
+
+        /* Bike Animation */
+        @keyframes slideIn {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .bike-animation {
+            margin: 40px auto;
+            width: 300px;
+            height: 150px;
+            position: relative;
+        }
+
+        .bike {
+            font-size: 100px;
+            color: var(--primary);
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        /* Booking Form */
+        .booking-form {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .booking-form {
+            background: var(--secondary);
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            color: var(--secondary);
+            text-align: center;
+        }
+
+        body.dark-mode .form-title {
+            color: var(--light);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        body.dark-mode .input-group label {
+            color: var(--light);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .suggestions {
+            background: var(--white);
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            position: absolute;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .suggestions {
+            background: var(--dark);
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .suggestion-item {
+            border-bottom: 1px solid #444;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        body.dark-mode .suggestion-item:hover {
+            background-color: #333;
+        }
+
+        .calculate-btn {
+            background: var(--primary);
+            color: var(--secondary);
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            background: #e6b800;
+        }
+
+        /* Results Section */
+        .results {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            display: none;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .results {
+            background: var(--secondary);
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            color: var(--secondary);
+            text-align: center;
+        }
+
+        body.dark-mode .result-title {
+            color: var(--light);
+        }
+
+        .result-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .result-label {
+            color: #aaa;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        body.dark-mode .result-value {
+            color: var(--light);
+        }
+
+        .fare-amount {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .book-btn {
+            background: var(--success);
+            color: var(--white);
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .book-btn:hover {
+            background: #218838;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            transform: translateY(-50px);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .modal-content {
+            background: var(--secondary);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        body.dark-mode .modal-close {
+            color: #aaa;
+        }
+
+        .modal-icon {
+            font-size: 60px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            color: var(--secondary);
+        }
+
+        body.dark-mode .modal-title {
+            color: var(--light);
+        }
+
+        .modal-details {
+            margin: 20px 0;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        body.dark-mode .modal-details {
+            background: #333;
+        }
+
+        .modal-details div {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Recent Searches */
+        .recent-searches {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        body.dark-mode .section-title {
+            color: var(--light);
+        }
+
+        .search-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .search-item {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .search-item {
+            background: var(--secondary);
+        }
+
+        .search-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .search-route {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        body.dark-mode .search-route {
+            color: var(--light);
+        }
+
+        .search-fare {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .bike-animation {
+                width: 250px;
+            }
+            
+            .bike {
+                font-size: 80px;
+            }
+            
+            .result-details {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .search-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .form-title, .result-title {
+                font-size: 1.5rem;
+            }
+            
+            .booking-form, .results {
+                padding: 20px;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: var(--light);
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            background: #111;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .footer-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-link {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">R</div>
+                    <div class="logo-text">RideKarachi</div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Your Ride, Your Way in Karachi</h1>
+            <p>Book affordable bike and rickshaw rides across the city with just a few taps</p>
+            <div class="bike-animation">
+                <div class="bike">
+                    <i class="fas fa-motorcycle"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="booking-form">
+            <h2 class="form-title">Book Your Ride</h2>
+            <div class="input-group">
+                <label for="pickup">Pickup Location</label>
+                <input type="text" id="pickup" class="input-field" placeholder="Enter pickup location">
+                <div class="suggestions" id="pickup-suggestions"></div>
+            </div>
+            <div class="input-group">
+                <label for="dropoff">Drop-off Location</label>
+                <input type="text" id="dropoff" class="input-field" placeholder="Enter drop-off location">
+                <div class="suggestions" id="dropoff-suggestions"></div>
+            </div>
+            <button class="calculate-btn" id="calculate-btn">Calculate Fare</button>
+        </section>
+
+        <section class="results" id="results">
+            <h2 class="result-title">Your Ride Details</h2>
+            <div class="result-details">
+                <div class="result-item">
+                    <div class="result-label">Distance</div>
+                    <div class="result-value" id="distance">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Estimated Time</div>
+                    <div class="result-value" id="time">-</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Fare</div>
+                    <div class="result-value fare-amount" id="fare">-</div>
+                </div>
+            </div>
+            <button class="book-btn" id="book-btn">Book Ride Now</button>
+        </section>
+
+        <section class="recent-searches" id="recent-searches">
+            <h2 class="section-title">Recent Searches</h2>
+            <div class="search-list" id="search-list">
+                <!-- Recent searches will be added here dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="modal-title">Ride Booked Successfully!</h2>
+            <p>Your rider is on the way to your pickup location.</p>
+            <div class="modal-details">
+                <div>
+                    <span>Rider Name:</span>
+                    <span>Ahmed Khan</span>
+                </div>
+                <div>
+                    <span>Vehicle:</span>
+                    <span>Bike (ABC 123)</span>
+                </div>
+                <div>
+                    <span>Pickup:</span>
+                    <span id="confirm-pickup">-</span>
+                </div>
+                <div>
+                    <span>Drop-off:</span>
+                    <span id="confirm-dropoff">-</span>
+                </div>
+                <div>
+                    <span>Fare:</span>
+                    <span id="confirm-fare">-</span>
+                </div>
+                <div>
+                    <span>ETA:</span>
+                    <span>5-7 minutes</span>
+                </div>
+            </div>
+            <button class="calculate-btn" id="modal-ok-btn">OK</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="footer-icon">R</div>
+                    <div class="footer-text">RideKarachi</div>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Contact</a>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                </div>
+                <div class="copyright">
+                    &copy; 2023 RideKarachi. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Karachi areas and distances data
+        const karachiAreas = [
+            "Gulshan-e-Iqbal", "Gulistan-e-Johar", "FB Area", "North Nazimabad", 
+            "PECHS", "Clifton", "Defence", "Saddar", "Lyari", "Malir", "Korangi", 
+            "Landhi", "Numaish", "Tariq Road", "Bahadurabad", "Gulshan-e-Maymar", 
+            "Surjani Town", "Scheme 33", "Airport", "University Road"
+        ];
+
+        // Sample distance matrix (in km)
+        const distanceData = {
+            "Gulshan-e-Iqbal": {
+                "Gulistan-e-Johar": 4.2,
+                "FB Area": 6.8,
+                "North Nazimabad": 9.1,
+                "University Road": 3.5
+            },
+            "Gulistan-e-Johar": {
+                "Gulshan-e-Iqbal": 4.2,
+                "FB Area": 8.3,
+                "University Road": 5.7
+            },
+            "FB Area": {
+                "Gulshan-e-Iqbal": 6.8,
+                "Gulistan-e-Johar": 8.3,
+                "North Nazimabad": 5.2,
+                "Saddar": 7.4
+            },
+            "North Nazimabad": {
+                "Gulshan-e-Iqbal": 9.1,
+                "FB Area": 5.2,
+                "Saddar": 6.8,
+                "Numaish": 5.3
+            },
+            "PECHS": {
+                "Tariq Road": 2.1,
+                "Bahadurabad": 3.2,
+                "Saddar": 4.7
+            },
+            "Clifton": {
+                "Defence": 3.5,
+                "Saddar": 8.2
+            },
+            "Defence": {
+                "Clifton": 3.5,
+                "Saddar": 9.1
+            },
+            "Saddar": {
+                "FB Area": 7.4,
+                "North Nazimabad": 6.8,
+                "PECHS": 4.7,
+                "Clifton": 8.2,
+                "Defence": 9.1,
+                "Lyari": 3.2,
+                "Numaish": 4.1
+            },
+            "Lyari": {
+                "Saddar": 3.2,
+                "Numaish": 4.8
+            },
+            "Malir": {
+                "Airport": 8.3,
+                "Korangi": 12.7
+            },
+            "Korangi": {
+                "Malir": 12.7,
+                "Landhi": 6.4
+            },
+            "Landhi": {
+                "Korangi": 6.4,
+                "Scheme 33": 8.9
+            },
+            "Numaish": {
+                "North Nazimabad": 5.3,
+                "Saddar": 4.1,
+                "Lyari": 4.8,
+                "Tariq Road": 2.7
+            },
+            "Tariq Road": {
+                "Numaish": 2.7,
+                "PECHS": 2.1,
+                "Bahadurabad": 1.8
+            },
+            "Bahadurabad": {
+                "Tariq Road": 1.8,
+                "PECHS": 3.2
+            },
+            "University Road": {
+                "Gulshan-e-Iqbal": 3.5,
+                "Gulistan-e-Johar": 5.7
+            }
+        };
+
+        // DOM elements
+        const themeToggle = document.getElementById('theme-toggle');
+        const pickupInput = document.getElementById('pickup');
+        const dropoffInput = document.getElementById('dropoff');
+        const pickupSuggestions = document.getElementById('pickup-suggestions');
+        const dropoffSuggestions = document.getElementById('dropoff-suggestions');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultsSection = document.getElementById('results');
+        const distanceElement = document.getElementById('distance');
+        const timeElement = document.getElementById('time');
+        const fareElement = document.getElementById('fare');
+        const bookBtn = document.getElementById('book-btn');
+        const searchList = document.getElementById('search-list');
+        const modal = document.getElementById('confirmation-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalOkBtn = document.getElementById('modal-ok-btn');
+        const confirmPickup = document.getElementById('confirm-pickup');
+        const confirmDropoff = document.getElementById('confirm-dropoff');
+        const confirmFare = document.getElementById('confirm-fare');
+
+        // Constants
+        const RATE_PER_KM = 50; // Base rate in PKR
+        const AVERAGE_SPEED = 30; // Average speed in km/h for time estimation
+
+        // Recent searches from localStorage
+        let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+
+        // Initialize the app
+        function initApp() {
+            // Set up event listeners
+            themeToggle.addEventListener('click', toggleTheme);
+            pickupInput.addEventListener('input', () => showSuggestions(pickupInput, pickupSuggestions));
+            dropoffInput.addEventListener('input', () => showSuggestions(dropoffInput, dropoffSuggestions));
+            calculateBtn.addEventListener('click', calculateFare);
+            bookBtn.addEventListener('click', showConfirmation);
+            modalClose.addEventListener('click', hideConfirmation);
+            modalOkBtn.addEventListener('click', hideConfirmation);
+            
+            // Close suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!pickupInput.contains(e.target) && !pickupSuggestions.contains(e.target)) {
+                    pickupSuggestions.style.display = 'none';
+                }
+                if (!dropoffInput.contains(e.target) && !dropoffSuggestions.contains(e.target)) {
+                    dropoffSuggestions.style.display = 'none';
+                }
+            });
+            
+            // Load recent searches
+            renderRecentSearches();
+        }
+
+        // Toggle dark/light theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Show area suggestions
+        function showSuggestions(inputElement, suggestionsElement) {
+            const value = inputElement.value.toLowerCase();
+            if (value.length < 2) {
+                suggestionsElement.style.display = 'none';
+                return;
+            }
+            
+            const filteredAreas = karachiAreas.filter(area => 
+                area.toLowerCase().includes(value)
+            );
+            
+            if (filteredAreas.length === 0) {
+                suggestionsElement.style.display = 'none';
+                return;
+            }
+            
+            suggestionsElement.innerHTML = '';
+            filteredAreas.forEach(area => {
+                const div = document.createElement('div');
+                div.classList.add('suggestion-item');
+                div.textContent = area;
+                div.addEventListener('click', () => {
+                    inputElement.value = area;
+                    suggestionsElement.style.display = 'none';
+                });
+                suggestionsElement.appendChild(div);
+            });
+            
+            suggestionsElement.style.display = 'block';
+        }
+
+        // Calculate fare based on pickup and dropoff
+        function calculateFare() {
+            const pickup = pickupInput.value.trim();
+            const dropoff = dropoffInput.value.trim();
+            
+            // Validate inputs
+            if (!pickup || !dropoff) {
+                alert('Please enter both pickup and dropoff locations');
+                return;
+            }
+            
+            if (pickup === dropoff) {
+                alert('Pickup and dropoff locations cannot be the same');
+                return;
+            }
+            
+            // Check if areas exist in our data
+            if (!karachiAreas.includes(pickup) || !karachiAreas.includes(dropoff)) {
+                alert('One or both locations are not in our service area. Please try another area.');
+                return;
+            }
+            
+            // Calculate distance
+            let distance = 0;
+            if (distanceData[pickup] && distanceData[pickup][dropoff]) {
+                distance = distanceData[pickup][dropoff];
+            } else if (distanceData[dropoff] && distanceData[dropoff][pickup]) {
+                distance = distanceData[dropoff][pickup];
+            } else {
+                // If no direct route, calculate approximate distance
+                distance = Math.floor(Math.random() * 15) + 5; // Random distance between 5-20 km
+            }
+            
+            // Calculate time (distance / speed in hours, converted to minutes)
+            const timeMinutes = Math.round((distance / AVERAGE_SPEED) * 60);
+            
+            // Calculate fare
+            const fare = Math.round(distance * RATE_PER_KM);
+            
+            // Display results
+            distanceElement.textContent = `${distance} km`;
+            timeElement.textContent = `${timeMinutes} min`;
+            fareElement.textContent = `Rs. ${fare}`;
+            
+            // Show results section
+            resultsSection.style.display = 'block';
+            
+            // Add to recent searches
+            addToRecentSearches(pickup, dropoff, distance, fare);
+        }
+
+        // Add search to recent searches
+        function addToRecentSearches(pickup, dropoff, distance, fare) {
+            // Remove if already exists
+            recentSearches = recentSearches.filter(search => 
+                !(search.pickup === pickup && search.dropoff === dropoff)
+            );
+            
+            // Add to beginning of array
+            recentSearches.unshift({ pickup, dropoff, distance, fare });
+            
+            // Keep only last 3 searches
+            if (recentSearches.length > 3) {
+                recentSearches.pop();
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+            
+            // Update UI
+            renderRecentSearches();
+        }
+
+        // Render recent searches
+        function renderRecentSearches() {
+            searchList.innerHTML = '';
+            
+            if (recentSearches.length === 0) {
+                const message = document.createElement('p');
+                message.textContent = 'No recent searches yet. Calculate a fare to see it here.';
+                searchList.appendChild(message);
+                return;
+            }
+            
+            recentSearches.forEach(search => {
+                const div = document.createElement('div');
+                div.classList.add('search-item');
+                div.innerHTML = `
+                    <div class="search-route">${search.pickup} to ${search.dropoff}</div>
+                    <div>Distance: ${search.distance} km</div>
+                    <div class="search-fare">Rs. ${search.fare}</div>
+                `;
+                
+                // Add click event to prefill form
+                div.addEventListener('click', () => {
+                    pickupInput.value = search.pickup;
+                    dropoffInput.value = search.dropoff;
+                    calculateFare();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+                
+                searchList.appendChild(div);
+            });
+        }
+
+        // Show confirmation modal
+        function showConfirmation() {
+            const pickup = pickupInput.value;
+            const dropoff = dropoffInput.value;
+            const fare = fareElement.textContent;
+            
+            confirmPickup.textContent = pickup;
+            confirmDropoff.textContent = dropoff;
+            confirmFare.textContent = fare;
+            
+            modal.classList.add('active');
+        }
+
+        // Hide confirmation modal
+        function hideConfirmation() {
+            modal.classList.remove('active');
+        }
+
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
